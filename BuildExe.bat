@@ -1,0 +1,1 @@
+pyinstaller -F --collect-submodules=pydicom %1
