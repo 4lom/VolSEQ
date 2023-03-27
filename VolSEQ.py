@@ -61,7 +61,6 @@ strTooltipROI = "Upload ROI file as a csv file"
 strTooltipXColumnROI = "Input column number for 1st pxX value. . These have the values of the points of the ROI."
 strTooltipYColumnROI = "Input column number for 1st pxY value. . These have the values of the points of the ROI."
 strTooltipdeltaColumnROI = "Calculate number of columns separating each pxX/pxY value"
-strTooltipTISSUE = "Choose tissue type (that is to be segmented) or enter HU values manually (custom)"
 strTooltipINMIN = " "
 strTooltipINMAX = " "
 strTooltipINVERTVALUE = "Invert the order in which the dicom Image are processed. In case the ROI and the DICOM does not have the same order."
@@ -346,50 +345,9 @@ def saveImageInPNGFile(imageData, filePath):
     img.save(filePath) 
 
 def displaySliceWithROI(imageData):
-    #Decod image
+    #Display image
     imageBuffer = ImageTk.PhotoImage(image=Image.open(io.BytesIO(base64.b64decode(imageData))))
     _VARS['WINDOW']['-IMAGE-'].update(data=imageBuffer)
-
-def updateHU(comboChoice):
-    #Decod image
-    _VARS['WINDOW']['-INMIN-'].update(disabled = True)
-    _VARS['WINDOW']['-INMAX-'].update(disabled = True)
-    if comboChoice == 'Bone':
-        _VARS['WINDOW']['-INMIN-'].update(1000)
-        _VARS['WINDOW']['-INMAX-'].update(float('inf'))
-    if comboChoice == 'Liver':
-        _VARS['WINDOW']['-INMIN-'].update(40)
-        _VARS['WINDOW']['-INMAX-'].update(60)
-    if comboChoice == 'White mater':
-        _VARS['WINDOW']['-INMIN-'].update(-30)
-        _VARS['WINDOW']['-INMAX-'].update(-20)
-    if comboChoice == 'Grey mater':
-        _VARS['WINDOW']['-INMIN-'].update(-45)
-        _VARS['WINDOW']['-INMAX-'].update(-37)
-    if comboChoice == 'Blood':
-        _VARS['WINDOW']['-INMIN-'].update(39)
-        _VARS['WINDOW']['-INMAX-'].update(41)
-    if comboChoice == 'Muscle':
-        _VARS['WINDOW']['-INMIN-'].update(10)
-        _VARS['WINDOW']['-INMAX-'].update(40)
-    if comboChoice == 'Kidney':
-        _VARS['WINDOW']['-INMIN-'].update(29)
-        _VARS['WINDOW']['-INMAX-'].update(31)
-    if comboChoice == 'CSP':
-        _VARS['WINDOW']['-INMIN-'].update(14)
-        _VARS['WINDOW']['-INMAX-'].update(16)
-    if comboChoice == 'Water':
-        _VARS['WINDOW']['-INMIN-'].update(-1)
-        _VARS['WINDOW']['-INMAX-'].update(1)
-    if comboChoice == 'Fat':
-        _VARS['WINDOW']['-INMIN-'].update(-100)
-        _VARS['WINDOW']['-INMAX-'].update(-50)
-    if comboChoice == 'Air':
-        _VARS['WINDOW']['-INMIN-'].update(float('-inf'))
-        _VARS['WINDOW']['-INMAX-'].update(-1000)
-    if comboChoice == 'Custom':
-        _VARS['WINDOW']['-INMIN-'].update(disabled = False)
-        _VARS['WINDOW']['-INMAX-'].update(disabled = False)
 
 # Main Definition:
 sg.theme('DarkTeal2')   # Theme
@@ -415,7 +373,6 @@ layout = [  [sg.T("")], [sg.Text("Choose a DICOMDIR file: "), sg.Input('', key='
             [sg.Text('Starting column for pxX in ROI file :'), sg.Input(xStartingColumnCSV, key='-XColumnROI-', enable_events=True, tooltip = strTooltipXColumnROI)],
             [sg.Text('Starting column for pyY in ROI file :'), sg.Input(yStartingColumnCSV, key='-YColumnROI-', enable_events=True, tooltip = strTooltipYColumnROI)],
             [sg.Text('Number of columns between pxX/pxY values in ROI file :'), sg.Input(deltaColumnCSV, key='-deltaColumnROI-', enable_events=True, tooltip = strTooltipdeltaColumnROI)],
-            [sg.Text('Tissue:'), sg.Combo(tissueComboChoice, enable_events=True, key='-TISSUE-', tooltip = strTooltipTISSUE)],
             [sg.Text('Enter HU minimum '), sg.Input('0', key='-INMIN-', enable_events=True, tooltip = strTooltipINMIN)],
             [sg.Text('Enter HU maximum '), sg.Input('0', key='-INMAX-', enable_events=True, tooltip = strTooltipINMAX)],
             #[sg.Text('Decrement DICOM image number'), sg.Slider(range=(0,1), key='-INVERTVALUE-', enable_events = True, orientation='h', size=(34, 20), default_value=1, tooltip = strTooltipINVERTVALUE)],
@@ -453,9 +410,6 @@ while True:
             sg.Popup('Error:', 'DICOMDIR file not found.')
         except IndexError:
                 sg.Popup('Error:', 'DICOMDIR file can not be read.')
-    if event == '-TISSUE-':
-        combo = values['-TISSUE-']  # use the combo key
-        updateHU(combo)
     if event == '-XColumnROI-' and values['-XColumnROI-'] and values['-XColumnROI-'][-1] not in ('-0123456789.'):
         _VARS['WINDOW']['-XColumnROI-'].update(values['-XColumnROI-'][:-1])
     if event == '-YColumnROI-' and values['-YColumnROI-'] and values['-YColumnROI-'][-1] not in ('-0123456789.'):
