@@ -20,6 +20,8 @@
 ## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ## SOFTWARE.
 
+strVersion="1.0.0"
+
 # Import Definition:
 import base64
 import PySimpleGUI as sg
@@ -366,16 +368,16 @@ tissueComboChoice = [ 'Bone',
                       'Air',
                       'Custom']
 
+menu_def = [['Help', 'About...'],]
 
-
-layout = [  [sg.T("")], [sg.Text("Choose a DICOMDIR file: "), sg.Input('', key='-DICOMDIR-', enable_events=True, tooltip = strTooltipDICOMDIR), sg.FileBrowse()],
+layout = [  [sg.Menu(menu_def)],
+            [sg.T("")], [sg.Text("Choose a DICOMDIR file: "), sg.Input('', key='-DICOMDIR-', enable_events=True, tooltip = strTooltipDICOMDIR), sg.FileBrowse()],
             [sg.T("")], [sg.Text("Choose a ROI file: "), sg.Input('', key='-ROI-', enable_events=True, tooltip = strTooltipROI), sg.FileBrowse()],
             [sg.Text('Starting column for pxX in ROI file :'), sg.Input(xStartingColumnCSV, key='-XColumnROI-', enable_events=True, tooltip = strTooltipXColumnROI)],
             [sg.Text('Starting column for pyY in ROI file :'), sg.Input(yStartingColumnCSV, key='-YColumnROI-', enable_events=True, tooltip = strTooltipYColumnROI)],
             [sg.Text('Number of columns between pxX/pxY values in ROI file :'), sg.Input(deltaColumnCSV, key='-deltaColumnROI-', enable_events=True, tooltip = strTooltipdeltaColumnROI)],
             [sg.Text('Enter HU minimum '), sg.Input('0', key='-INMIN-', enable_events=True, tooltip = strTooltipINMIN)],
             [sg.Text('Enter HU maximum '), sg.Input('0', key='-INMAX-', enable_events=True, tooltip = strTooltipINMAX)],
-            #[sg.Text('Decrement DICOM image number'), sg.Slider(range=(0,1), key='-INVERTVALUE-', enable_events = True, orientation='h', size=(34, 20), default_value=1, tooltip = strTooltipINVERTVALUE)],
             [sg.Checkbox('Decrement DICOM image number', key='-INVERTVALUE-', default=True, tooltip = strTooltipINVERTVALUE)],
             [sg.Button('Process', tooltip = strTooltipProcess)],
             [sg.Text('Segmented tissue value:'), sg.Text('0.0', key='-ROISUM-', tooltip = strTooltipROISUM),sg.Text('mm^3', tooltip = strTooltipROISUM)],
@@ -455,5 +457,7 @@ while True:
         if file_path:
             sliderValue = int(values['-SLIDER-'])
             saveImageInPNGFile( [figListOfFigOfSliceWithROI[sliderValue-1], figListOfFilteredFigOfSliceWithROI[sliderValue-1]], file_path)
+    if event == 'About...':
+            sg.Popup('VolSEQ Version' + strVersion +'\t\t', '\tMIT License\t\t\t', title = 'About...')
         
 _VARS['WINDOW'].close()
