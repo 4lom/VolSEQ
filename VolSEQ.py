@@ -112,7 +112,7 @@ def saveFigOfSliceWithROI(arr, poly_path):
     imageBuffer = base64.b64encode(io_buf.getvalue())
     io_buf.close()
 
-    ax.patches.pop()
+    [p.remove() for p in reversed(ax.patches)]
 
     return imageBuffer
 
