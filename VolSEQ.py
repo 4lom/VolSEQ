@@ -27,8 +27,6 @@ import base64
 import PySimpleGUI as sg
 
 from pathlib import Path
-from tempfile import TemporaryDirectory
-import warnings
 
 import io
 from PIL import Image, ImageTk
