@@ -308,16 +308,16 @@ def verifyInputData(DICOMDIRpath, ROIpath, minHU, maxHU):
     if(isStrEmpty(DICOMDIRpath) and isStrEmpty(ROIpath) and isStrEmpty(minHU) and isStrEmpty(maxHU)):
         sg.Popup('Error:', 'Some input are missing. Please enter all input.')
         return False
-    #elif(minHU > maxHU):
-    #    sg.Popup('Error:', 'Minimum HU value is greater than maximum HU value.')
-    #    return False
     try:
         f1 = open(DICOMDIRpath, "r")
-        f2 = open(ROIpath, "r")
-        float(values['-INMIN-'])
-        float(values['-INMAX-'])
         f1.close()
+        f2 = open(ROIpath, "r")
         f2.close()
+        inminbuff = float(values['-INMIN-'])
+        inmaxbuff = float(values['-INMAX-'])
+        if inmaxbuff <= inminbuff:
+            sg.Popup('Error:', 'Minimum HU value is greater or equal to maximum HU value.')
+            return False
     except IOError:
         sg.Popup('Error:', 'File does not exist.')
         return False
